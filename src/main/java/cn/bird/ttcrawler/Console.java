@@ -180,16 +180,30 @@ public class Console {
 								for(String imageUrl : itemDetail.getImages()){
 									int i = imageUrl.lastIndexOf(".");
 									int j = imageUrl.lastIndexOf(":");
-									if(i >= 0 && j >= 0){
-										String postfix = imageUrl.substring(i+1);
-										String urlPath = imageUrl.substring(j+1);
-										String[] tmpArray = imageUrl.split(":");
-										String fullImageUrl = "https://" + tmpArray[1] + ".b0.upaiyun.com" + tmpArray[2];
-										String imageFilePath = imageDir + File.separator + imageNum + "." + postfix;
-										//下载图片
-										queryService.downloadPic(fullImageUrl, imageFilePath);
-										imageNum++;
+									if(imageUrl.startsWith("http://") || imageUrl.startsWith("https://")){
+										int k = imageUrl.lastIndexOf(".");
+										if(k >= 0){
+											String postfix = imageUrl.substring(k+1);
+											String imageFilePath = imageDir + File.separator + imageNum + "." + postfix;
+											//下载图片
+											queryService.downloadPic(imageUrl, imageFilePath);
+											imageNum++;
+										}
+										
+									}else{
+										if(i >= 0 && j >= 0){
+											String postfix = imageUrl.substring(i+1);
+											String urlPath = imageUrl.substring(j+1);
+											String[] tmpArray = imageUrl.split(":");
+											//logger.error(imageUrl);
+											String fullImageUrl = "https://" + tmpArray[1] + ".b0.upaiyun.com" + tmpArray[2];
+											String imageFilePath = imageDir + File.separator + imageNum + "." + postfix;
+											//下载图片
+											queryService.downloadPic(fullImageUrl, imageFilePath);
+											imageNum++;
+										}
 									}
+									
 								}
 								
 							}
